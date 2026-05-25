@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Terminal model meta.json schema",
+  "type": "object",
+  "required": ["format_version","model_version","framework","dtype","endianness","weights_size","weights_sha256","created_at","tensors"],
+  "properties": {
+    "format_version": {"type": "integer", "minimum": 1},
+    "model_version": {"type": "string"},
+    "framework": {"type": "string"},
+    "dtype": {"type": "string"},
+    "endianness": {"type": "string", "enum": ["little","big"]},
+    "weights_size": {"type": "integer", "minimum": 0},
+    "weights_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "tensors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name","shape","offset","length_bytes"],
+        "properties": {
+          "name": {"type": "string"},
+          "shape": {"type": "array", "items": {"type": "integer"}},
+          "offset": {"type": "integer", "minimum": 0},
+          "length_bytes": {"type": "integer", "minimum": 0},
+          "dtype": {"type": "string"},
+          "order": {"type": "string", "enum": ["C","F"]}
+        }
+      }
+    }
+  }
+}

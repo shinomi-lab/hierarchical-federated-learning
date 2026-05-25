@@ -1,0 +1,49 @@
+# ================================================================
+# docker/Dockerfile.terminal
+# HFL 仮想端末クライアント (Python + PyTorch CPU-only)
+# ================================================================
+# ビルドコンテキスト: HFL/（リポジトリルート）
+# 例: docker compose -f docker/docker-compose.yml build terminal-00
+
+FROM python:3.11-slim
+
+# 依存ライブラリ (apt)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# ── PyTorch CPU-only を先にインストール (キャッシュ効率化) ──
+# CPU 版は ~250MB (GPU 版 ~2.5GB に対して大幅に小さい)
+RUN pip install --no-cache-dir \
+    torch==2.2.2 \
+    --index-url https://download.pytorch.org/whl/cpu
+
+# ── その他の依存パッケージ ──
+COPY terminal_client/requirements.txt /tmp/requirements.txt
+RUN grep -v "^torch" /tmp/requirements.txt | \
+    pip install --no-cache-dir -r /dev/stdin
+
+# ── Sim_HFL の sim/ パッケージをコピー (モデル・学習ロジック) ──
+COPY Sim_HFL/sim/ /app/sim_hfl/sim/
+RUN touch /app/sim_hfl/__init__.py
+
+# ── 端末クライアント本体 ──
+COPY terminal_client/main.py /app/main.py
+
+# ログ出力ディレクトリ
+RUN mkdir -p /app/logs
+
+# ── 環境変数デフォルト (docker-compose.yml で上書き) ──
+ENV TERMINAL_ID=terminal-00 \
+    EDGE_URL=http://edge-00:8001 \
+    APP_CATEGORY=browser \
+    SEED=0 \
+    NUM_ROUNDS=30 \
+    NUM_SAMPLES=1000 \
+    LOCAL_ROUNDS=5 \
+    EPOCHS=5 \
+    PYTHONUNBUFFERED=1
+
+CMD ["python", "main.py"]

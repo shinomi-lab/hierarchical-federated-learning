@@ -1,0 +1,192 @@
+# ================================================================
+# docker/docker-compose.yml
+# HFL 全コンテナ一括起動（研究デフォルト: 中央1・エッジ2・端末3 = 2+1）
+#
+# このファイル内の相対パスは **本ファイルがある docker/ ディレクトリ基準**。
+#
+# 起動（リポジトリルートから）:
+#   docker compose -f docker/docker-compose.yml up --build
+# または docker/ に cd して:
+#   docker compose up --build
+#
+# ルートの compose.yaml から include される場合も同じ解釈。
+#
+# 構成:
+#   central  × 1 (port 8000)   CENTRAL_AGGREGATION_THRESHOLD=2
+#   edge-00  × 1 (host 8001)   端末2台でエッジ集約
+#   edge-01  × 1 (host 8002)   端末1台＝FedAvg 1件＝実質パススルー
+#   terminal × 3（仮想）
+#   redis    × 1
+#
+# 物理 Android 端末:
+#   2台 → http://localhost:8001 (edge-00)
+#   1台 → http://localhost:8002 (edge-01)
+#
+# より多いエッジ・端末が必要な場合は compose を拡張するか、
+# 環境変数を上書きして閾値のみ調整してください。
+# ================================================================
+
+name: hfl
+
+networks:
+  hfl_net:
+    driver: bridge
+
+volumes:
+  central_state:
+  edge00_data:
+  edge01_data:
+  terminal_logs:
+
+services:
+
+  redis:
+    image: redis:7-alpine
+    container_name: hfl-redis
+    networks: [hfl_net]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  central:
+    build:
+      context: ../Serverside_HFL
+      dockerfile: ../docker/Dockerfile.central
+    container_name: hfl-central
+    networks: [hfl_net]
+    ports:
+      - "8000:8000"
+    environment:
+      CENTRAL_SERVER_HOST:           "0.0.0.0"
+      CENTRAL_SERVER_PORT:           "8000"
+      CENTRAL_AGGREGATION_THRESHOLD: "2"
+      PYTHONUNBUFFERED:              "1"
+    volumes:
+      - central_state:/app/state
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  edge-00:
+    build:
+      context: ../Serverside_HFL
+      dockerfile: ../docker/Dockerfile.edge
+    container_name: hfl-edge-00
+    networks: [hfl_net]
+    ports:
+      - "8001:8001"
+    environment:
+      CENTRAL_SERVER_URL:                   "http://central:8000"
+      EDGE_SERVER_ID:                       "edge-00"
+      EDGE_AGGREGATION_THRESHOLD:           "2"
+      EDGE_AGGREGATION_THRESHOLD_OVERRIDE:  "2"
+      HFL_ENV:                              "docker"
+      PYTHONUNBUFFERED:                     "1"
+    volumes:
+      - edge00_data:/app/received_files
+    depends_on:
+      central:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  edge-01:
+    build:
+      context: ../Serverside_HFL
+      dockerfile: ../docker/Dockerfile.edge
+    container_name: hfl-edge-01
+    networks: [hfl_net]
+    ports:
+      - "8002:8001"
+    environment:
+      CENTRAL_SERVER_URL:                   "http://central:8000"
+      EDGE_SERVER_ID:                       "edge-01"
+      EDGE_AGGREGATION_THRESHOLD:           "1"
+      EDGE_AGGREGATION_THRESHOLD_OVERRIDE:  "1"
+      HFL_ENV:                              "docker"
+      PYTHONUNBUFFERED:                     "1"
+    volumes:
+      - edge01_data:/app/received_files
+    depends_on:
+      central:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  terminal-00:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.terminal
+    container_name: hfl-terminal-00
+    networks: [hfl_net]
+    environment:
+      TERMINAL_ID:   "terminal-00"
+      EDGE_URL:      "${HFL_EDGE_URL_TERMINAL_00:-http://edge-00:8001}"
+      APP_CATEGORY:  "browser"
+      SEED:          "0"
+      NUM_ROUNDS:    "30"
+    volumes:
+      - terminal_logs:/app/logs
+    depends_on:
+      edge-00:
+        condition: service_healthy
+    restart: on-failure
+
+  terminal-01:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.terminal
+    container_name: hfl-terminal-01
+    networks: [hfl_net]
+    environment:
+      TERMINAL_ID:   "terminal-01"
+      EDGE_URL:      "${HFL_EDGE_URL_TERMINAL_01:-http://edge-00:8001}"
+      APP_CATEGORY:  "video"
+      SEED:          "1"
+      NUM_ROUNDS:    "30"
+    volumes:
+      - terminal_logs:/app/logs
+    depends_on:
+      edge-00:
+        condition: service_healthy
+    restart: on-failure
+
+  terminal-02:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.terminal
+    container_name: hfl-terminal-02
+    networks: [hfl_net]
+    environment:
+      TERMINAL_ID:   "terminal-02"
+      EDGE_URL:      "${HFL_EDGE_URL_TERMINAL_02:-http://edge-01:8001}"
+      APP_CATEGORY:  "call"
+      SEED:          "2"
+      NUM_ROUNDS:    "30"
+    volumes:
+      - terminal_logs:/app/logs
+    depends_on:
+      edge-01:
+        condition: service_healthy
+    restart: on-failure

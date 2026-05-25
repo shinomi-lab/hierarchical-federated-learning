@@ -1,0 +1,119 @@
+# Sim_HFL デフォルト設定
+# run_sim.py --config config/default.yaml で読み込まれる
+#
+# ★ 実機 (LocalTrainer.kt / TrainingViewModel.kt performLocalTrainingSuspend) との対応表:
+#   input_size      ← tpRttFeatures(2) + appNumMax(APP_CAT_COUNT=4) = 6
+#   hidden_size     ← hiddenSize = 32
+#   output_size     ← appNumMax = APP_CAT_COUNT = 4
+#   learning_rate   ← learningRate = 0.0001
+#   weight_decay    ← weightDecay = 0.01
+#   clip_max_norm   ← clipMaxNorm = 1.0
+#   warmup_steps    ← warmupSteps = 10
+#   min_lr_ratio    ← minLrRatio = 0.1
+#   dropout_p       ← dropoutP = 0.1
+#   batch_size      ← localBatchSize = 16
+#   epochs          ← localEpochs = 5
+
+experiment:
+  name: "hfl_ap_selection"
+  seed: 42
+
+federation:
+  # ── HFL トポロジー ─────────────────────────────────────────
+  num_edge_servers: 2
+  num_terminals: 4
+
+  # エッジ → 端末インデックスのマッピング
+  edge_topology:
+    edge-00: [0, 1]    # エッジ1: 端末0, 端末1
+    edge-01: [2,3]       # エッジ2: 端末2
+
+  # ── ラウンド設定 ───────────────────────────────────────────
+  num_rounds: 5
+
+  # 1グローバルラウンドあたりのローカルラウンド数
+  local_rounds: 5
+
+model:
+  # 実機 LocalTrainer.kt / performLocalTrainingSuspend と完全一致
+  input_size: 6             # [TP_Mbps, RTT_ms, app_browser, app_video, app_call, app_other]
+  hidden_size: 32
+  output_size: 4            # 4アプリカテゴリ (browser, video, call, other)
+  dropout_p: 0.1            # LocalTrainer.kt dropoutP = 0.1f
+
+local_training:
+  epochs: 5                 # localEpochs = 5
+  batch_size: 16            # localBatchSize = 16
+  learning_rate: 0.0001     # learningRate = 0.0001f
+  weight_decay: 0.01        # weightDecay = 0.01f
+  clip_max_norm: 1.0        # clipMaxNorm = 1.0f
+  warmup_steps: 10          # warmupSteps = 10
+  min_lr_ratio: 0.1         # minLrRatio = 0.1f
+
+data:
+  total_samples: 3000       # 全端末合計サンプル数（3端末 × 1000）
+  iid: true
+  dirichlet_alpha: 0.5
+
+  # ── APネットワーク特性シミュレーション ──────────────────────
+  # 実機サーバー edge_server/endpoints/virtual_congestion.py と完全同一の
+  # M/M/1 + Erlang-B モデルを使用（サーバーが実験に注入している遅延設定と一致）。
+  #
+  # RTT 計算式（サーバー同一）:
+  #   virtual_rtt = 1/(μ - λ) × 1000  [ms]
+  #   rtt_report  = max(initial_rtt_ms, virtual_rtt)
+  # TP 計算式（サーバー同一）:
+  #   offered_A = λ / μ
+  #   P_loss    = erlang_b(n_channels, offered_A)
+  #   TP        = tp_init × (1 - P_loss)
+  #
+  # AP_A (WiFi): virtual_congestion.py ROUTER_PARAMS["A"] と完全一致
+  #   0台: RTT=500ms, TP≈50Mbps
+  #   1台: RTT=1000ms, A=0.5, erlang_b(2,0.5)≈7.7%  → TP≈46.2Mbps
+  #   2台: RTT=10000ms(飽和),  A=1.0, erlang_b(2,1.0)≈20% → TP≈40Mbps
+  ap_a:
+    tp_mean: 250.0      # Mbps  (tp_init_mbps)  ← virtual_congestion.py AP "A"
+    tp_std: 3.0         # Gaussian fallback 用 (queue model 未設定時のみ使用)
+    rtt_mean: 100.0     # ms    (両AP 100ms に統一)
+    rtt_std: 5.0        # Gaussian fallback 用
+    # ── M/M/1 + Erlang-B (virtual_congestion.py と完全一致) ──
+    mu_rtt: 8.0         # μ (サービス率) — 混雑しやすいAP
+    n_channels: 2       # Erlang-B チャネル数
+    rtt_noise_std: 10.0 # RTT ガウスノイズ標準偏差 (ms)
+    tp_noise_std: 1.0   # TP ガウスノイズ標準偏差 (Mbps)
+
+  # AP_B (Cellular): virtual_congestion.py ROUTER_PARAMS["B"] と完全一致
+  #   0台: RTT=200ms, TP≈20Mbps
+  #   1台: RTT=250ms, A=0.2, erlang_b(10,0.2)≈極小 → TP≈20Mbps
+  #   2台: RTT=333ms, A=0.4, erlang_b(10,0.4)≈極小 → TP≈20Mbps
+  #   3台: RTT=500ms, A=0.6, erlang_b(10,0.6)≈極小 → TP≈20Mbps
+  ap_b:
+    tp_mean: 200.0       # Mbps  (tp_init_mbps)  ← virtual_congestion.py AP "B"
+    tp_std: 2.0         # Gaussian fallback 用
+    rtt_mean: 100.0     # ms    (両AP 100ms に統一)
+    rtt_std: 10.0       # Gaussian fallback 用
+    # ── M/M/1 + Erlang-B (virtual_congestion.py と完全一致) ──
+    mu_rtt: 15.0        # μ (サービス率) — 安定したAP
+    n_channels: 10      # Erlang-B チャネル数
+    rtt_noise_std: 10.0 # RTT ノイズ標準偏差 (ms)
+    tp_noise_std: 1.0   # TP ノイズ標準偏差 (Mbps)
+
+  # アプリカテゴリ別の要件 (TerminalSatisfaction と同一設定)
+  # browser, video: TP優先  /  call: RTT優先  /  other: TP優先
+  app_requirements:
+    browser: {tp_need: 5.0,   rtt_need: 150.0, type: "browser"}
+    video:   {tp_need: 10.0,  rtt_need: 200.0, type: "video"}
+    call:    {tp_need: 0.5,   rtt_need: 100.0, type: "call"}
+    other:   {tp_need: 2.0,   rtt_need: 200.0, type: "other"}
+
+theory:
+  auto_estimate: true
+  L: null
+  mu: null
+  sigma_sq: null
+
+output:
+  results_dir: "results"
+  log_format: "jsonl"
+  save_plots: true
+  verbose: true

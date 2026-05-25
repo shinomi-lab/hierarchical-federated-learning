@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Permissions（重複削除＆整理） -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission
+        android:name="android.permission.NEARBY_WIFI_DEVICES"
+        android:required="false" />
+    <!-- Added for network switching helpers -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
+
+    <application
+        android:name=".HflApplication"
+        android:largeHeap="true"
+        android:usesCleartextTraffic="true"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.HFL_experiment"
+        tools:targetApi="31">
+
+        <activity
+            android:name="com.example.hfl_experiment.ui.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.HFL_experiment">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.example.hfl_experiment.ui.EdgeEndpointSetupActivity"
+            android:exported="false"
+            android:label="エッジ接続先"
+            android:theme="@style/Theme.HFL_experiment" />
+
+        <activity
+            android:name="com.example.hfl_experiment.ui.TerminalIdentitySetupActivity"
+            android:exported="false"
+            android:label="端末 ID"
+            android:theme="@style/Theme.HFL_experiment" />
+
+        <!-- Test activity to manually run DeviceAckClient for verification -->
+        <activity
+            android:name="com.example.hfl_experiment.device.DeviceAckTestActivity"
+            android:exported="true"
+            android:label="Device ACK Test" />
+
+        <activity
+            android:name="com.example.hfl_experiment.ui.LogSenderActivity"
+            android:exported="true"
+            android:label="Log Sender" />
+
+        <!-- Broadcast receiver to dump upload_logs.csv to logcat for debug retrieval -->
+        <receiver android:name="com.example.hfl_experiment.debug.DumpUploadLogsReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.hfl_experiment.DUMP_UPLOAD_LOGS" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.example.hfl_experiment.debug.ExportLogsReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.hfl_experiment.EXPORT_LOGS" />
+            </intent-filter>
+        </receiver>
+        <!-- Perfetto sync marker receiver (adb broadcast trigger) -->
+        <receiver android:name="com.example.hfl_experiment.telemetry.SyncStartReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.hfl_experiment.SYNC_START" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Receiver that handles connect actions from notifications -->
+        <receiver android:name="com.example.hfl_experiment.notification.ConnectReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.hfl_experiment.notification.CONNECT" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Notification listener service: requires user to grant notification access -->
+        <service android:name="com.example.hfl_experiment.notification.AutoNotificationListener"
+            android:label="AutoNotificationListener"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+    </application>
+</manifest>

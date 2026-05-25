@@ -1,0 +1,49 @@
+# ================================================================
+# docker/Dockerfile.edge
+# HFL エッジサーバー (FastAPI + PyTorch CPU)
+# ================================================================
+# ビルドコンテキスト: HFL/Serverside_HFL/
+# 例: docker compose -f docker/docker-compose.yml build edge-00
+#     （リポジトリルートから）
+
+FROM python:3.11-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# ── PyTorch CPU-only ──
+RUN pip install --no-cache-dir \
+    torch==2.2.2 \
+    --index-url https://download.pytorch.org/whl/cpu
+
+# ── 依存パッケージ (redis を含む) ──
+COPY requirements.txt /tmp/req.txt
+RUN grep -v "^torch" /tmp/req.txt | \
+    pip install --no-cache-dir -r /dev/stdin
+
+# ── サーバーコード ──
+COPY . /app/
+
+# 必要ディレクトリを事前作成
+RUN mkdir -p /app/received_files /app/logs /app/state
+
+# ── デフォルト環境変数 (docker-compose.yml で上書き) ──
+ENV EDGE_SERVER_HOST=0.0.0.0 \
+    EDGE_SERVER_PORT=8001 \
+    EDGE_SERVER_ID=edge-00 \
+    CENTRAL_SERVER_URL=http://central:8000 \
+    EDGE_AGGREGATION_THRESHOLD=2 \
+    HFL_ENV=docker \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app
+
+EXPOSE 8001
+
+HEALTHCHECK --interval=10s --timeout=5s --retries=10 \
+    CMD curl -f http://localhost:8001/ || exit 1
+
+CMD ["python", "-m", "uvicorn", "edge_server.main:app", \
+     "--host", "0.0.0.0", "--port", "8001", "--log-level", "info"]

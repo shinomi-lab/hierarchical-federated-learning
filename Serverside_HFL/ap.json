@@ -1,0 +1,23 @@
+[
+	{
+		"id": 0,
+		"dataLimit": 7168,
+		"transferSend": 0,
+		"transferRecieve": 0,
+		"price": 7000
+	},
+	{
+		"id": 1,
+		"dataLimit": 5120,
+		"transferSend": 0,
+		"transferRecieve": 0,
+		"price": 5000
+	},
+	{
+		"id": 2,
+		"dataLimit": 3072,
+		"transferSend": 0,
+		"transferRecieve": 0,
+		"price": 3000
+	}
+]

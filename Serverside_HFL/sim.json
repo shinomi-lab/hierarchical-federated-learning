@@ -1,0 +1,26 @@
+{
+	"termNum": 70,
+	"appNumMax": 4,
+	"apNumMax": 3,
+	"termCapa": 100,
+
+	"type": "A",
+	"appUseSec": 90,
+	"simNumTime": 10,
+	"initRTT": 20,
+	"output": {
+		"average": {
+		"windowsize": 12, 
+		"windowsizePercent": 10
+		},
+		"outFileDir": "output"
+	},
+	"algo": {
+		"upperLimit": true,
+		"algoNum": 7
+	},
+	"iterate": {
+		"simTimeMax": 10000,
+		"intervalSec": 120
+	}
+}

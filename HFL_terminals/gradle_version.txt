@@ -1,0 +1,15 @@
+
+------------------------------------------------------------
+Gradle 8.11.1
+------------------------------------------------------------
+
+Build time:    2024-11-20 16:56:46 UTC
+Revision:      481cb05a490e0ef9f8620f7873b83bd8a72e7c39
+
+Kotlin:        2.0.20
+Groovy:        3.0.22
+Ant:           Apache Ant(TM) version 1.10.14 compiled on August 16 2023
+Launcher JVM:  23.0.2 (Oracle Corporation 23.0.2+7-58)
+Daemon JVM:    C:\Program Files\Java\jdk-23 (no JDK specified, using current Java home)
+OS:            Windows 11 10.0 amd64
+

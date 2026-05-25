@@ -1,0 +1,117 @@
+Aggregate round=1 with 10 terminals, tensor_size=500000
+Elapsed seconds: 0.043
+Top callers (by cumulative):
+   Ordered by: cumulative time
+   List reduced from 512 to 20 due to restriction <20>
+
+Function                                                                                                                        called...
+                                                                                                                                    ncalls  tottime  cumtime
+C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:908(save)                       ->       0    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:822(_open_zipfile_writer)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:876(_check_dill_version)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:900(_check_save_filelike)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\threading.py:306(__exit__)
+                                                                                                                                         1    0.000    0.000  {built-in method builtins.isinstance}
+                                                                                                                                         1    0.000    0.000  {built-in method nt.fspath}
+                                                                                                                                         1    0.000    0.000  {built-in method torch._C._log_api_usage_once}
+C:\Users\tetsu\Serverside\edge_server\endpoints\aggregation.py:64(_check_same_keys_and_shapes)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\Serverside\edge_server\endpoints\aggregation.py:83(_sanitize_weights)
+                                                                                                                                         1    0.000    0.000  {built-in method torch.is_floating_point}
+                                                                                                                                        10    0.005    0.005  {built-in method torch.isinf}
+                                                                                                                                        10    0.004    0.004  {built-in method torch.isnan}
+                                                                                                                                         1    0.004    0.004  {built-in method torch.stack}
+                                                                                                                                         1    0.000    0.000  {built-in method torch.tensor}
+                                                                                                                                        20    0.004    0.004  {method 'any' of 'torch._C.TensorBase' objects}
+                                                                                                                                        10    0.000    0.000  {method 'append' of 'list' objects}
+                                                                                                                                        10    0.000    0.000  {method 'detach' of 'torch._C.TensorBase' objects}
+                                                                                                                                         1    0.001    0.001  {method 'sum' of 'torch._C.TensorBase' objects}
+                                                                                                                                        10    0.000    0.000  {method 'to' of 'torch._C.TensorBase' objects}
+                                                                                                                                         1    0.000    0.000  {method 'view' of 'torch._C.TensorBase' objects}
+C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:797(__exit__)                   -> 
+C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:1141(_save)                     ->       1    0.000    0.000  {built-in method builtins.__build_class__}
+                                                                                                                                         1    0.000    0.000  {built-in method builtins.len}
+                                                                                                                                         1    0.000    0.000  {method 'dump' of '_pickle.Pickler' objects}
+                                                                                                                                         1    0.000    0.000  {method 'getvalue' of '_io.BytesIO' objects}
+C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py:1954(_run_once)                               ->       3    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py:766(time)
+                                                                                                                                       5/1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py:87(_run)
+                                                                                                                                         3    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\proactor_events.py:880(_process_events)
+                                                                                                                                       3/0    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\windows_events.py:444(select)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:214(_get_storage_alignment)
+                                                                                                                                         8    0.000    0.000  {built-in method builtins.len}
+                                                                                                                                         6    0.000    0.000  {method 'popleft' of 'collections.deque' objects}
+C:\Users\tetsu\Serverside\edge_server\endpoints\aggregation.py:745(aggregate_and_send_to_central_server)  ->       4    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\locks.py:13(__aenter__)
+                                                                                                                                         4    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\locks.py:19(__aexit__)
+                                                                                                                                         2    0.000    0.001  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\logging\__init__.py:1509(info)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:148(__truediv__)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:227(__str__)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:664(resolve)
+                                                                                                                                         1    0.003    0.022  C:\Users\tetsu\Serverside\edge_server\endpoints\aggregation.py:91(_fedavg_state_dicts_weighted)
+                                                                                                                                         1    0.000    0.001  C:\Users\tetsu\Serverside\edge_server\endpoints\aggregation.py:166(_register_pending)
+                                                                                                                                       1/0    0.000    0.000  C:\Users\tetsu\Serverside\edge_server\endpoints\aggregation.py:212(_save_temp_aggregated)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\Serverside\edge_server\endpoints\aggregation.py:627(clear_round_scheduled)
+                                                                                                                                         2    0.000    0.001  C:\Users\tetsu\Serverside\edge_server\state.py:119(save_state)
+                                                                                                                                         2    0.000    0.001  C:\Users\tetsu\Serverside\edge_server\state.py:140(set_processing)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\Serverside\edge_server\state.py:200(clear_round)
+                                                                                                                                         2    0.000    0.000  {built-in method builtins.any}
+                                                                                                                                         1    0.000    0.000  {built-in method builtins.len}
+                                                                                                                                         4    0.000    0.000  {built-in method builtins.print}
+                                                                                                                                         1    0.000    0.000  {built-in method builtins.sum}
+                                                                                                                                         1    0.000    0.000  {built-in method now}
+                                                                                                                                         1    0.000    0.000  {method 'add' of 'set' objects}
+                                                                                                                                        10    0.000    0.000  {method 'append' of 'list' objects}
+                                                                                                                                         1    0.000    0.000  {method 'discard' of 'set' objects}
+                                                                                                                                         2    0.000    0.000  {method 'get' of 'dict' objects}
+                                                                                                                                         1    0.000    0.000  {method 'isoformat' of 'datetime.datetime' objects}
+                                                                                                                                         1    0.000    0.000  {method 'items' of 'dict' objects}
+                                                                                                                                         1    0.000    0.000  {method 'remove' of 'set' objects}
+                                                                                                                                        10    0.000    0.000  {method 'setdefault' of 'dict' objects}
+C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py:87(_run)                                           ->     8/4    0.000    0.000  {method 'run' of '_contextvars.Context' objects}
+{method 'run' of '_contextvars.Context' objects}                                                                                ->       2    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\futures.py:378(_set_state)
+                                                                                                                                         2    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\futures.py:384(_call_check_cancel)
+                                                                                                                                         3    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\proactor_events.py:789(_loop_self_reading)
+                                                                                                                                       1/0    0.000    0.000  C:\Users\tetsu\Serverside\tools\run_edge_profiler.py:41(run_profile)
+C:\Users\tetsu\Serverside\edge_server\endpoints\aggregation.py:745(aggregate_and_send_to_central_server)
+                                                                                                                                         1    0.000    0.000  {built-in method time.time}
+                                                                                                                                         1    0.000    0.000  {method 'disable' of '_lsprof.Profiler' objects}
+{built-in method torch.isinf}                                                                                                   -> 
+C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:822(_open_zipfile_writer)       ->       1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:720(_is_path)
+                                                                                                                                         0    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:775(__init__)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\threading.py:315(_acquire_restore)
+C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:775(__init__)                   ->       1    0.000    0.000  {method 'encode' of 'str' objects}
+{method 'any' of 'torch._C.TensorBase' objects}                                                                                 -> 
+{built-in method torch.stack}                                                                                                   -> 
+C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:171(get_crc32_options)          ->       1    0.000    0.004  <frozen importlib._bootstrap>:1349(_find_and_load)
+                                                                                                                                         1    0.000    0.000  <frozen importlib._bootstrap>:1390(_handle_fromlist)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\utils\_config_module.py:774(__getattr__)
+<frozen importlib._bootstrap>:1349(_find_and_load)                                                                              ->       2    0.000    0.000  <frozen importlib._bootstrap>:412(__init__)
+                                                                                                                                         2    0.000    0.000  <frozen importlib._bootstrap>:416(__enter__)
+                                                                                                                                         2    0.000    0.000  <frozen importlib._bootstrap>:420(__exit__)
+                                                                                                                                         2    0.000    0.000  <frozen importlib._bootstrap>:445(cb)
+                                                                                                                                       2/1    0.000    0.004  <frozen importlib._bootstrap>:1304(_find_and_load_unlocked)
+                                                                                                                                         4    0.000    0.000  {method 'get' of 'dict' objects}
+{built-in method torch.isnan}                                                                                                   -> 
+<frozen importlib._bootstrap>:1304(_find_and_load_unlocked)                                                                     ->     2/1    0.000    0.003  <frozen importlib._bootstrap>:911(_load_unlocked)
+                                                                                                                                         2    0.000    0.001  <frozen importlib._bootstrap>:1240(_find_spec)
+                                                                                                                                         2    0.000    0.000  {built-in method builtins.setattr}
+                                                                                                                                         2    0.000    0.000  {method 'append' of 'list' objects}
+                                                                                                                                         2    0.000    0.000  {method 'pop' of 'list' objects}
+                                                                                                                                         4    0.000    0.000  {method 'rpartition' of 'str' objects}
+C:\Users\tetsu\Serverside\edge_server\endpoints\aggregation.py:212(_save_temp_aggregated)                 ->     2/0    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\threads.py:12(to_thread)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:222(with_suffix)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:442(exists)
+                                                                                                                                         3    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:148(__truediv__)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:227(__str__)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:664(resolve)
+                                                                                                                                         1    0.000    0.002  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:717(mkdir)
+                                                                                                                                         0    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:797(__exit__)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\uuid.py:337(hex)
+                                                                                                                                         1    0.000    0.000  C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\uuid.py:710(uuid4)
+                                                                                                                                         1    0.000    0.001  C:\Users\tetsu\Serverside\edge_server\endpoints\aggregation.py:166(_register_pending)
+                                                                                                                                         2    0.000    0.000  {built-in method time.time}
+                                                                                                                                         1    0.000    0.000  {method 'close' of '_io.FileIO' objects}
+<frozen importlib._bootstrap>:911(_load_unlocked)                                                                               ->       2    0.000    0.000  <frozen importlib._bootstrap>:491(_verbose_message)
+                                                                                                                                         2    0.000    0.000  <frozen importlib._bootstrap>:806(module_from_spec)
+                                                                                                                                       2/1    0.000    0.003  <frozen importlib._bootstrap_external>:1020(exec_module)
+                                                                                                                                         2    0.000    0.000  {built-in method builtins.hasattr}
+                                                                                                                                         2    0.000    0.000  {method 'pop' of 'dict' objects}
+
+

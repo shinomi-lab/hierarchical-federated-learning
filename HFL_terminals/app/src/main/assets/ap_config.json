@@ -1,0 +1,12 @@
+{
+  "apA": {"id":"apA","ssid":"HFL_A24","psk":"Tetsu060986239","priority":1},
+  "apB": {"id":"apB","ssid":"HFL_B","psk":"","priority":0},
+  "modelFile": "model.tflite",
+  "emaAlpha": 0.6,
+  "consecutiveThreshold": 3,
+  "minSwitchSeconds": 300,
+  "deltaThreshold": 0.15,
+  "cycleWindow": 5,
+  "needTP": {"app0": 5.0, "app1": 2.0, "app2": 10.0, "app3": 1.0},
+  "needRTT": {"app0": 100, "app1": 50, "app2": 200, "app3": 30}
+}

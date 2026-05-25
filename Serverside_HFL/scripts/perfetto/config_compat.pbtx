@@ -1,0 +1,65 @@
+# Perfetto config for HFL real-device experiment tracing
+# Target: 30-minute recording, 25MB ring buffer
+# Focus: CPU scheduling, frequency scaling, kernel utilization
+
+buffers {
+  size_kb: 25600
+  fill_policy: RING_BUFFER
+}
+
+data_sources {
+  config {
+    name: "linux.ftrace"
+    ftrace_config {
+      ftrace_events: "sched/sched_switch"
+      ftrace_events: "sched/sched_wakeup"
+      ftrace_events: "sched/sched_wakeup_new"
+      ftrace_events: "sched/sched_process_exit"
+      ftrace_events: "sched/sched_process_free"
+      ftrace_events: "power/cpu_frequency"
+      ftrace_events: "power/cpu_idle"
+      ftrace_events: "power/suspend_resume"
+      ftrace_events: "task/task_newtask"
+      ftrace_events: "task/task_rename"
+      # Thermal throttling indicators
+      ftrace_events: "thermal/thermal_temperature"
+      # Network activity indicators
+      ftrace_events: "net/net_dev_xmit"
+      # App-level atrace categories
+      atrace_categories: "view"
+      atrace_categories: "am"
+      atrace_categories: "dalvik"
+      atrace_apps: "com.example.hfl_experiment"
+      buffer_size_kb: 8192
+      drain_period_ms: 250
+    }
+  }
+}
+
+data_sources {
+  config {
+    name: "linux.process_stats"
+    process_stats_config {
+      scan_all_processes_on_start: true
+      proc_stats_poll_ms: 5000
+    }
+  }
+}
+
+data_sources {
+  config {
+    name: "linux.sys_stats"
+    sys_stats_config {
+      meminfo_period_ms: 5000
+      stat_period_ms: 2500
+    }
+  }
+}
+
+data_sources {
+  config {
+    name: "android.kernel_util"
+  }
+}
+
+duration_ms: 1800000

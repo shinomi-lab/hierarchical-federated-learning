@@ -1,0 +1,67 @@
+# ================================================================
+# 論理クライアントのみ（中央・エッジ・Redis はホストの Cursor 等で起動している前提）
+#
+# 既定の EDGE_URL は Docker Desktop の host.docker.internal（ホストの 8001/8002）
+# 実機と同じ LAN IP にしたい場合は --env-file で上書きする。
+#
+# 例（リポジトリルート）:
+#   docker compose --env-file docker/generated-logical-client.env \\
+#     -f docker/docker-compose.logical-clients.yml up --build
+#
+# 手動の例:
+#   export HFL_EDGE_URL_TERMINAL_00=http://192.168.11.2:8001
+#   export HFL_EDGE_URL_TERMINAL_01=http://192.168.11.2:8001
+#   export HFL_EDGE_URL_TERMINAL_02=http://192.168.11.2:8002
+#   docker compose -f docker/docker-compose.logical-clients.yml up --build
+# ================================================================
+
+name: hfl-logical
+
+volumes:
+  terminal_logs:
+
+services:
+  terminal-00:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.terminal
+    container_name: hfl-terminal-00
+    environment:
+      TERMINAL_ID:   "terminal-00"
+      EDGE_URL:      "${HFL_EDGE_URL_TERMINAL_00:-http://host.docker.internal:8001}"
+      APP_CATEGORY:  "browser"
+      SEED:          "0"
+      NUM_ROUNDS:    "30"
+    volumes:
+      - terminal_logs:/app/logs
+    restart: on-failure
+
+  terminal-01:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.terminal
+    container_name: hfl-terminal-01
+    environment:
+      TERMINAL_ID:   "terminal-01"
+      EDGE_URL:      "${HFL_EDGE_URL_TERMINAL_01:-http://host.docker.internal:8001}"
+      APP_CATEGORY:  "video"
+      SEED:          "1"
+      NUM_ROUNDS:    "30"
+    volumes:
+      - terminal_logs:/app/logs
+    restart: on-failure
+
+  terminal-02:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.terminal
+    container_name: hfl-terminal-02
+    environment:
+      TERMINAL_ID:   "terminal-02"
+      EDGE_URL:      "${HFL_EDGE_URL_TERMINAL_02:-http://host.docker.internal:8002}"
+      APP_CATEGORY:  "call"
+      SEED:          "2"
+      NUM_ROUNDS:    "30"
+    volumes:
+      - terminal_logs:/app/logs
+    restart: on-failure

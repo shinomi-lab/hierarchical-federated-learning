@@ -1,0 +1,4 @@
+# リポジトリルートから: docker compose up --build
+# 実体は docker/docker-compose.yml（相対パスはあちらのファイル基準）
+include:
+  - docker/docker-compose.yml

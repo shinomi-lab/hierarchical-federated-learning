@@ -1,0 +1,58 @@
+         3683 function calls (3666 primitive calls) in 0.049 seconds
+
+   Ordered by: cumulative time
+   List reduced from 512 to 50 due to restriction <50>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.036    0.036 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:908(save)
+        1    0.003    0.003    0.022    0.022 C:\Users\tetsu\Serverside\edge_server\endpoints\aggregation.py:91(_fedavg_state_dicts_weighted)
+        1    0.000    0.000    0.012    0.012 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:797(__exit__)
+        1    0.010    0.010    0.010    0.010 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:1141(_save)
+        4    0.000    0.000    0.007    0.002 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py:1954(_run_once)
+        3    0.000    0.000    0.007    0.002 C:\Users\tetsu\Serverside\edge_server\endpoints\aggregation.py:745(aggregate_and_send_to_central_server)
+        9    0.000    0.000    0.006    0.001 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py:87(_run)
+        9    0.000    0.000    0.006    0.001 {method 'run' of '_contextvars.Context' objects}
+        2    0.000    0.000    0.006    0.003 C:\Users\tetsu\Serverside\tools\run_edge_profiler.py:41(run_profile)
+       10    0.005    0.000    0.005    0.000 {built-in method torch.isinf}
+        1    0.000    0.000    0.004    0.004 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:822(_open_zipfile_writer)
+        1    0.000    0.000    0.004    0.004 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:775(__init__)
+       20    0.004    0.000    0.004    0.000 {method 'any' of 'torch._C.TensorBase' objects}
+        1    0.004    0.004    0.004    0.004 {built-in method torch.stack}
+        1    0.000    0.000    0.004    0.004 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\serialization.py:171(get_crc32_options)
+      2/1    0.000    0.000    0.004    0.004 <frozen importlib._bootstrap>:1349(_find_and_load)
+       10    0.004    0.000    0.004    0.000 {built-in method torch.isnan}
+      2/1    0.000    0.000    0.004    0.004 <frozen importlib._bootstrap>:1304(_find_and_load_unlocked)
+        3    0.000    0.000    0.004    0.001 C:\Users\tetsu\Serverside\edge_server\endpoints\aggregation.py:212(_save_temp_aggregated)
+      2/1    0.000    0.000    0.003    0.003 <frozen importlib._bootstrap>:911(_load_unlocked)
+      2/1    0.000    0.000    0.003    0.003 <frozen importlib._bootstrap_external>:1020(exec_module)
+        6    0.000    0.000    0.003    0.000 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:548(write_text)
+        6    0.000    0.000    0.003    0.000 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:644(write_text)
+      5/2    0.000    0.000    0.003    0.001 <frozen importlib._bootstrap>:480(_call_with_frames_removed)
+      2/1    0.000    0.000    0.003    0.003 {built-in method builtins.exec}
+        1    0.000    0.000    0.003    0.003 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\utils\serialization\__init__.py:1(<module>)
+        4    0.000    0.000    0.003    0.001 <frozen importlib._bootstrap>:1390(_handle_fromlist)
+        1    0.000    0.000    0.003    0.003 {built-in method builtins.__import__}
+        4    0.000    0.000    0.002    0.001 C:\Users\tetsu\Serverside\edge_server\state.py:119(save_state)
+        3    0.000    0.000    0.002    0.001 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:717(mkdir)
+        4    0.000    0.000    0.002    0.001 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\threads.py:12(to_thread)
+        2    0.000    0.000    0.002    0.001 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py:881(run_in_executor)
+        3    0.002    0.001    0.002    0.001 {built-in method nt.mkdir}
+        7    0.002    0.000    0.002    0.000 {built-in method _io.open}
+        6    0.000    0.000    0.002    0.000 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:529(open)
+        1    0.000    0.000    0.002    0.002 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\utils\serialization\config.py:1(<module>)
+        2    0.000    0.000    0.001    0.001 C:\Users\tetsu\Serverside\edge_server\endpoints\aggregation.py:166(_register_pending)
+        2    0.000    0.000    0.001    0.001 C:\Users\tetsu\Serverside\edge_server\state.py:140(set_processing)
+        1    0.000    0.000    0.001    0.001 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\utils\_config_module.py:165(install_config_module)
+        2    0.000    0.000    0.001    0.001 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\logging\__init__.py:1509(info)
+        2    0.000    0.000    0.001    0.001 <frozen importlib._bootstrap_external>:1093(get_code)
+        2    0.000    0.000    0.001    0.001 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\logging\__init__.py:1640(_log)
+       19    0.001    0.000    0.001    0.000 {built-in method nt.stat}
+        1    0.001    0.001    0.001    0.001 {method 'sum' of 'torch._C.TensorBase' objects}
+        2    0.000    0.000    0.001    0.000 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\thread.py:54(run)
+        2    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:1214(get_data)
+        2    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:1240(_find_spec)
+        9    0.001    0.000    0.001    0.000 {method '__exit__' of '_io._IOBase' objects}
+        2    0.000    0.000    0.001    0.000 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\logging\__init__.py:1666(handle)
+        1    0.000    0.000    0.001    0.001 C:\Users\tetsu\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\utils\_config_module.py:240(get_assignments_with_compile_ignored_comments)
+
+

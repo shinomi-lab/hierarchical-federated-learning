@@ -1,0 +1,15 @@
+(pktmon extracted TCP exchange between 192.168.0.25 and 192.168.0.11 on port 8001)
+- TCP handshake observed (SYN / SYN-ACK / ACK)
+- Multiple TCP segments with PUSH flag and substantial lengths (281, 347, 295 bytes etc.) indicate application payload exchange
+- Regular ACKs observed, periodic FINs at session end
+- No plain-text HTTP/1.1 Upgrade lines were found in pktmon text output; pcapng should be inspected with tshark/Wireshark to confirm HTTP Upgrade/101 response
+
+Representative lines (from pktmon.txt):
+192.168.0.25.45138 > 192.168.0.11.8001: Flags [S], seq 1497063833
+192.168.0.11.8001 > 192.168.0.25.45138: Flags [S.], seq 1641228367, ack 1497063834
+192.168.0.25.45138 > 192.168.0.11.8001: Flags [P.], length 281
+192.168.0.11.8001 > 192.168.0.25.45138: Flags [P.], length 229
+...
+
+Recommendation: run tshark to extract HTTP requests/responses from capture.pcapng and paste the output here for deterministic verification of WebSocket Upgrade (GET + Upgrade header / 101 Switching Protocols).
+
