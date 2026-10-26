@@ -1,0 +1,13 @@
+{
+  "expected_edge_count": 1,
+  "expected_edge_ids": [
+    "edge-server-01"
+  ],
+  "aggregation_policy": "weighted_mean",
+  "required_edges_to_aggregate": 1,
+  "reaggregation_timeout_sec": 300,
+  "auth_required": false,
+  "tokens": {},
+  "logging_level": "info",
+  "model_output_dir": "global_models"
+}

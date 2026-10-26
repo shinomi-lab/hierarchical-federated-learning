@@ -1,0 +1,97 @@
+{
+  "format_version": 1,
+  "framework": "pytorch_android",
+  "model_version": "golden",
+  "dtype": "float32",
+  "endianness": "little",
+  "tensors": [
+    {
+      "name": "layer1.bias",
+      "shape": [
+        8
+      ],
+      "offset": 0,
+      "length_bytes": 32
+    },
+    {
+      "name": "layer1.weight",
+      "shape": [
+        8,
+        6
+      ],
+      "offset": 32,
+      "length_bytes": 192
+    },
+    {
+      "name": "layer2.bias",
+      "shape": [
+        8
+      ],
+      "offset": 224,
+      "length_bytes": 32
+    },
+    {
+      "name": "layer2.weight",
+      "shape": [
+        8,
+        8
+      ],
+      "offset": 256,
+      "length_bytes": 256
+    },
+    {
+      "name": "layer3.bias",
+      "shape": [
+        4
+      ],
+      "offset": 512,
+      "length_bytes": 16
+    },
+    {
+      "name": "layer3.weight",
+      "shape": [
+        4,
+        8
+      ],
+      "offset": 528,
+      "length_bytes": 128
+    },
+    {
+      "name": "norm1.bias",
+      "shape": [
+        8
+      ],
+      "offset": 656,
+      "length_bytes": 32
+    },
+    {
+      "name": "norm1.weight",
+      "shape": [
+        8
+      ],
+      "offset": 688,
+      "length_bytes": 32
+    },
+    {
+      "name": "norm2.bias",
+      "shape": [
+        8
+      ],
+      "offset": 720,
+      "length_bytes": 32
+    },
+    {
+      "name": "norm2.weight",
+      "shape": [
+        8
+      ],
+      "offset": 752,
+      "length_bytes": 32
+    }
+  ],
+  "weights_sha256": "dbde0226239b21da130b22f7904d99840947df0be09655fb5cd26facdb08a43b",
+  "weights_size": 784,
+  "created_at": "2026-10-13T00:53:17Z",
+  "nan_detected": false,
+  "nan_keys": []
+}

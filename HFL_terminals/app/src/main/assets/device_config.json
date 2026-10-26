@@ -1,0 +1,15 @@
+{
+  "terminal_id": "",
+  "device_label": "",
+  "preferred_ssid": "HFL_A24",
+  "upload_ssid": "HFL_B",
+  "ssid_priority": ["HFL_A24", "HFL_B"],
+  "network_switch_forced": true,
+  "auto_upload": true,
+  "experiment_group": "",
+  "tp_threshold_mbps": 5.0,
+  "rtt_threshold_ms": 100,
+  "max_upload_retries": 3,
+  "send_telemetry": true,
+  "extras": {}
+}

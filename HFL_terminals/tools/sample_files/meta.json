@@ -1,0 +1,33 @@
+{
+  "format_version": 1,
+  "model_version": "sample_1",
+  "framework": "pytorch_state_dict",
+  "dtype": "float32",
+  "endianness": "little",
+  "weights_size": 36,
+  "weights_sha256": "ece49446613c7f0f4ff3ad5006150b19f98b01b5ffb6c23fcb1991c55697a0e0",
+  "created_at": "2025-12-17T00:00:00Z",
+  "tensors": [
+    {
+      "name": "layer1.weight",
+      "shape": [
+        2,
+        3
+      ],
+      "offset": 0,
+      "length_bytes": 24,
+      "dtype": "float32",
+      "order": "C"
+    },
+    {
+      "name": "layer2.bias",
+      "shape": [
+        3
+      ],
+      "offset": 24,
+      "length_bytes": 12,
+      "dtype": "float32",
+      "order": "C"
+    }
+  ]
+}

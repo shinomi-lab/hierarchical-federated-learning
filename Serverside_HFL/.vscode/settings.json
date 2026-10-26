@@ -1,0 +1,9 @@
+{
+  "python.envFile": "${workspaceFolder}/.env",
+  "explorer.sortOrder": "modified",
+  "python.analysis.extraPaths": [
+    "."
+  ],
+  "python-envs.defaultEnvManager": "ms-python.python:system",
+  "python-envs.pythonProjects": []
+}

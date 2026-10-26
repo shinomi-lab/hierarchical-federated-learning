@@ -1,0 +1,94 @@
+{
+  "info": {
+    "name": "HFL Server-side - Edge/Central/Test Collection",
+    "_postman_id": "hfl-server-side-collection",
+    "description": "Postman collection for testing `edge_server` and `central_server` endpoints (meta, upload weights). Use environment variables to set hosts and tokens.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "PROTOCOL", "value": "http" },
+    { "key": "EDGE_HOSTNAME", "value": "localhost" },
+    { "key": "EDGE_PORT", "value": "8001" },
+    { "key": "CENTRAL_HOSTNAME", "value": "localhost" },
+    { "key": "CENTRAL_PORT", "value": "8000" },
+    { "key": "EDGE_TOKEN", "value": "" },
+    { "key": "TID", "value": "terminal-123" },
+    { "key": "MODEL_ID", "value": "demo-mlp-v1" }
+  ],
+  "item": [
+    {
+      "name": "Edge - GET /api/v1/meta",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{PROTOCOL}}://{{EDGE_HOSTNAME}}:{{EDGE_PORT}}/api/v1/meta",
+          "host": ["{{EDGE_HOSTNAME}}"],
+          "port": "{{EDGE_PORT}}",
+          "protocol": "{{PROTOCOL}}",
+          "path": ["api","v1","meta"]
+        }
+      }
+    },
+    {
+      "name": "Edge - POST /receive_terminal_weights (torch_state_dict)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{EDGE_TOKEN}}", "type": "text" }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "round", "value": "1", "type": "text" },
+            { "key": "model_id", "value": "{{MODEL_ID}}", "type": "text" },
+            { "key": "base_hash", "value": "sha256:bootstrap", "type": "text" },
+            { "key": "n_samples", "value": "100", "type": "text" },
+            { "key": "dtype", "value": "torch_state_dict", "type": "text" },
+            { "key": "weights", "type": "file", "src": "./local_weights.pt" },
+            { "key": "contentSha256", "value": "sha256:<hex>", "type": "text" }
+          ]
+        },
+        "url": {
+          "raw": "{{PROTOCOL}}://{{EDGE_HOSTNAME}}:{{EDGE_PORT}}/receive_terminal_weights/{{TID}}",
+          "host": ["{{EDGE_HOSTNAME}}"],
+          "port": "{{EDGE_PORT}}",
+          "protocol": "{{PROTOCOL}}",
+          "path": ["receive_terminal_weights","{{TID}}"]
+        }
+      }
+    },
+    {
+      "name": "Edge - POST /receive_terminal_weights (f32_flat)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{EDGE_TOKEN}}", "type": "text" }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "round", "value": "1", "type": "text" },
+            { "key": "model_id", "value": "{{MODEL_ID}}", "type": "text" },
+            { "key": "base_hash", "value": "sha256:bootstrap", "type": "text" },
+            { "key": "n_samples", "value": "50", "type": "text" },
+            { "key": "dtype", "value": "f32_flat", "type": "text" },
+            { "key": "payload_kind", "value": "full", "type": "text" },
+            { "key": "input_size", "value": "128", "type": "text" },
+            { "key": "hidden_size", "value": "64", "type": "text" },
+            { "key": "output_size", "value": "10", "type": "text" },
+            { "key": "weights", "type": "file", "src": "./flat_weights.bin" },
+            { "key": "contentSha256", "value": "sha256:<hex>", "type": "text" }
+          ]
+        },
+        "url": {
+          "raw": "{{PROTOCOL}}://{{EDGE_HOSTNAME}}:{{EDGE_PORT}}/receive_terminal_weights/{{TID}}",
+          "host": ["{{EDGE_HOSTNAME}}"],
+          "port": "{{EDGE_PORT}}",
+          "protocol": "{{PROTOCOL}}",
+          "path": ["receive_terminal_weights","{{TID}}"]
+        }
+      }
+    }
+  ]
+}

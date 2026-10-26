@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:gravity="center_horizontal">
+
+    <!-- Status Card: Terminal Satisfaction / Current AP / Server Round -->
+    <!-- pale yellow background to stand out -->
+    <LinearLayout
+        android:id="@+id/statusCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="#FFF9C4"
+        android:clipToPadding="false">
+
+        <TextView
+            android:id="@+id/textSatisfaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/status_satisfaction"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingBottom="6dp" />
+
+        <ProgressBar
+            android:id="@+id/progressSatisfaction"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:progress="0"
+            android:max="100"
+            android:indeterminate="false" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/textCurrentAp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/status_current_ap"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textServerRound"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/status_server_round"
+                android:textSize="14sp"
+                android:gravity="end" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonDownloadModel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_download_model" />
+
+    <!-- プログレスバー -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/buttonTrain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_train"
+        android:enabled="false"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/btn_validate_dto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/validate_dto"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>

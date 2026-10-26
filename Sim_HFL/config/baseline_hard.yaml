@@ -1,0 +1,96 @@
+# Sim_HFL ベースライン比較用「拮抗 (hard)」設定
+# default.yaml をベースに、AP パラメータを実機側 (virtual_congestion.py
+# ROUTER_PARAMS) と完全一致させる。
+# AP 容量を絞り、混雑時に満足度に差が出るようにする。
+#
+# 実機 ROUTER_PARAMS:
+#   A: initial_rtt_ms=20.0, tp_init_mbps=50.0, mu=2.0, n=2
+#   B: initial_rtt_ms=80.0, tp_init_mbps=20.0, mu=5.0, n=10
+#
+# 期待される 4端末時の挙動:
+#   AP_0 (A) は 3台目以降で λ≥μ (飽和) → RTT 10000ms、TP も大きく劣化
+#   AP_1 (B) は n=10, mu=5 で耐性が高い
+#   → fixed (全員 AP0) は混雑して満足度低下、greedy は AP1 へ逃げる、random はばらつく
+
+experiment:
+  name: "hfl_ap_selection_hard"
+  seed: 42
+  baseline_mode: "none"   # CLI --baseline {fixed,random,greedy} で上書き
+  # 実機 minSwitchSeconds=300秒 ≈ 5 ローカルサイクル ≈ 1G 相当のクールダウン。
+  # 単位はローカルサイクル (run_inference は各サイクル後に1回呼ばれる)。
+  # ベースラインモードでは適用されない (実機 DecisionEngine も baseline 時は cooldown 判定をバイパス)。
+  min_switch_rounds: 5
+
+federation:
+  num_edge_servers: 2
+  num_terminals: 4
+  edge_topology:
+    edge-00: [0, 1]
+    edge-01: [2, 3]
+  num_rounds: 30
+  local_rounds: 5
+
+model:
+  input_size: 6
+  hidden_size: 32
+  output_size: 4
+  dropout_p: 0.1
+
+local_training:
+  epochs: 5
+  batch_size: 16
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  clip_max_norm: 1.0
+  warmup_steps: 10
+  min_lr_ratio: 0.1
+
+data:
+  total_samples: 3000
+  iid: true
+  dirichlet_alpha: 0.5
+
+  # 4端末アプリ固定割当 (browser=0, video=1, call=2, other=3)。
+  # call (RTT 重視) を必ず含めることで AP 混雑時の RTT 飽和が満足度に効くようにする。
+  # 実機実験 (1端末1アプリ) との対応も取りやすい。未指定なら seed+999 乱数。
+  terminal_apps: [0, 1, 2, 3]
+
+  # ── AP_0 (実機 AP "A" = WiFi) ──
+  ap_a:
+    tp_mean: 50.0
+    tp_std: 3.0
+    rtt_mean: 20.0
+    rtt_std: 5.0
+    mu_rtt: 2.0
+    n_channels: 2
+    rtt_noise_std: 2.0
+    tp_noise_std: 1.0
+
+  # ── AP_1 (実機 AP "B" = Cellular) ──
+  ap_b:
+    tp_mean: 20.0
+    tp_std: 2.0
+    rtt_mean: 80.0
+    rtt_std: 10.0
+    mu_rtt: 5.0
+    n_channels: 10
+    rtt_noise_std: 5.0
+    tp_noise_std: 1.0
+
+  app_requirements:
+    browser: {tp_need: 5.0,   rtt_need: 150.0, type: "browser"}
+    video:   {tp_need: 10.0,  rtt_need: 200.0, type: "video"}
+    call:    {tp_need: 0.5,   rtt_need: 100.0, type: "call"}
+    other:   {tp_need: 2.0,   rtt_need: 200.0, type: "other"}
+
+theory:
+  auto_estimate: true
+  L: null
+  mu: null
+  sigma_sq: null
+
+output:
+  results_dir: "results"
+  log_format: "jsonl"
+  save_plots: true
+  verbose: true

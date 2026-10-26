@@ -1,0 +1,77 @@
+# 同質AP設定: AP_A と AP_B を同スペックにする。
+# baseline_hard(タイプ分化)との対比用。同質APでは各アプリに構造的な最適APが無く、
+# 純粋な負荷分散(協調問題)になる → 独立学習はherdingし、中央協調(CTDE)が効くはず。
+# 中庸スペック(mu=4,n=4,tp=35,rtt=40)で、複数端末が乗ると混雑する。
+
+experiment:
+  name: "hfl_ap_selection_homog"
+  seed: 42
+  baseline_mode: "none"
+  decision_mode: "independent"   # CLI --decision-mode coordinated で上書き
+  min_switch_rounds: 5
+
+federation:
+  num_edge_servers: 2
+  num_terminals: 4
+  edge_topology:
+    edge-00: [0, 1]
+    edge-01: [2, 3]
+  num_rounds: 30
+  local_rounds: 5
+
+model:
+  input_size: 6
+  hidden_size: 32
+  output_size: 4
+  dropout_p: 0.1
+
+local_training:
+  epochs: 5
+  batch_size: 16
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  clip_max_norm: 1.0
+  warmup_steps: 10
+  min_lr_ratio: 0.1
+
+data:
+  total_samples: 3000
+  iid: true
+  dirichlet_alpha: 0.5
+  terminal_apps: [0, 1, 2, 3]   # browser, video, call, 配信
+
+  # ── AP_0 と AP_1 を同スペックに (同質) ──
+  ap_a:
+    tp_mean: 35.0
+    tp_std: 3.0
+    rtt_mean: 40.0
+    rtt_std: 5.0
+    mu_rtt: 4.0
+    n_channels: 4
+    rtt_noise_std: 2.0
+    tp_noise_std: 1.0
+
+  ap_b:
+    tp_mean: 35.0
+    tp_std: 3.0
+    rtt_mean: 40.0
+    rtt_std: 5.0
+    mu_rtt: 4.0
+    n_channels: 4
+    rtt_noise_std: 2.0
+    tp_noise_std: 1.0
+
+  app_requirements:
+    browser: {tp_need: 5.0,   rtt_need: 0.0,   type: "browser"}
+    video:   {tp_need: 10.0,  rtt_need: 0.0,   type: "video"}
+    call:    {tp_need: 0.0,   rtt_need: 200.0, type: "call"}
+    streaming: {tp_need: 0.0, rtt_need: 100.0, type: "streaming"}
+
+theory:
+  auto_estimate: true
+
+output:
+  results_dir: "results"
+  log_format: "jsonl"
+  save_plots: false
+  verbose: true

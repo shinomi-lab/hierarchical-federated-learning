@@ -1,0 +1,29 @@
+# Serverside_HFL/scripts/trials.example.yaml
+settings:
+  seed: 20261014           # 順序の無作為化の seed（マニフェストに記録）
+  terminals: [device-001, device-002, device-003, device-004]
+  max_retries: 2           # 1 試行の再試行上限
+  max_topup_rounds: 1      # 有効数が足りない条件の追加回数の上限
+  cooldown_s: 60           # 試行の間の待ち（電池・発熱）
+  timeout_factor: 3        # 完了待ちのタイムアウト = 想定時間 × これ
+  # ⚠ 端末 ID はラボで要確認（点検 C2）: アプリの IP 自動設定は terminal-01〜04、runbook は device-001〜004。
+  #   ランナーは session_complete の terminal_id で待つので、端末の実際の ID と一致させること。
+  devices:                 # 端末と adb シリアル（EXPERIMENT_RUNBOOK.md §4 の表と同じ。terminals の各 ID に要る）
+    device-001: "192.168.11.11:5555"
+    device-002: "192.168.11.12:5555"
+    device-003: "192.168.11.13:5555"
+    device-004: "192.168.11.14:5555"
+  runs_dir: ~/hfl_runs     # 毎試行の実行ディレクトリ（prepare_server_run.sh の HFL_RUNS_DIR）
+  server:                  # 既定は過去の実機（6/18）準拠。start.py の既定（エッジ [2,1]）には頼らない
+    env: shinomilab
+    edge_thresholds: [2, 2]
+    central_threshold: 2   # sync のみ
+    k_central: 1           # async のみ
+  # delay_targets: {A: 192.168.11.0/24, B: <AP_B 側の IP>}   # ラボで確かめてから（Task 14 Step 0）
+  # delay_probes:  {A: [192.168.11.1], B: [<AP_B 側の IP>]}
+conditions:
+  - {name: sync_none,  mode: sync,  baseline: none,  num_cycles: 5, n: 5}
+  - {name: async_none, mode: async, baseline: none,  num_cycles: 5, n: 5}
+  - {name: sync_fixed, mode: sync,  baseline: fixed, num_cycles: 5, n: 3}
+  # 遅延条件は settings.delay_targets（ラボで AP_B 側の IP を確かめてから）と sudoers の設定が要る（Task 13・14）
+  # - {name: async_asym, mode: async, baseline: none, num_cycles: 5, n: 16, delay: {A: 100, B: 0}}

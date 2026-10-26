@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HFL Experiment</string>
+    <string name="button_download_model">Download Model</string>
+    <string name="button_train">Train</string>
+    <string name="status_satisfaction">Satisfaction: n/a</string>
+    <string name="status_current_ap">Current AP: -</string>
+    <string name="status_server_round">Server Round: -</string>
+    <string name="validate_dto">Validate DTO</string>
+
+    <!-- Added dialog strings referenced by TrainingScreen.kt -->
+    <string name="dialog_logs_uploaded_title">Upload successful</string>
+    <string name="dialog_logs_uploaded_error">Upload failed</string>
+</resources>

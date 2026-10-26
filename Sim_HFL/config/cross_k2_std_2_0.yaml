@@ -1,0 +1,97 @@
+# Sim_HFL 非同期 HFL 用「拮抗 (hard)」設定
+# baseline_hard.yaml をベースに、非同期モード固有のパラメータを追加。
+# CLI: python run_sim.py --config config/baseline_hard_async.yaml --async --runs 3
+
+experiment:
+  name: "async_hfl_ap_selection_hard"
+  seed: 42
+  hfl_mode: "async"        # "sync" | "async"。run_sim.py --async で上書き
+  baseline_mode: "none"    # async では学習させたいので "none" 固定
+  min_switch_rounds: 5
+
+federation:
+  num_edge_servers: 2
+  num_terminals: 4
+  edge_topology:
+    edge-00: [0, 1]
+    edge-01: [2, 3]
+  # async は「離散時間ステップ = num_rounds * local_rounds」回ループする。
+  # 同期版と同じ実時間スケールでの比較になるよう、両者で同じ値にする。
+  num_rounds: 30
+  local_rounds: 5
+
+# ── Async 固有パラメータ ─────────────────────────────────
+async:
+  # K_edge: edge ごとの集約閾値 (pending ≥ K で発火)。
+  # 端末数 ≤ K_edge なら端末数を閾値とする (auto decay) ので、4端末2エッジで K=2 は妥当
+  k_edge: 2
+  # K_central: central の集約閾値。
+  # 1 = 「片 edge だけで global 更新が起きる」最も非同期な構成
+  # 2 = 半同期 (両 edge を待つ)
+  k_central: 2
+  # MAX_STALENESS_ROUNDS: これ以上古い更新は破棄
+  max_staleness_rounds: 5
+  # 端末学習所要時間 (ステップ単位、正規分布)
+  # 1 step ≈ 実機 1 ローカルサイクル時間 (≈ 1分)
+  terminal_speed_mean: 1.0
+  terminal_speed_std: 2.0
+
+model:
+  input_size: 6
+  hidden_size: 32
+  output_size: 4
+  dropout_p: 0.1
+
+local_training:
+  epochs: 5
+  batch_size: 16
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  clip_max_norm: 1.0
+  warmup_steps: 10
+  min_lr_ratio: 0.1
+
+data:
+  total_samples: 3000
+  iid: true
+  dirichlet_alpha: 0.5
+
+  terminal_apps: [0, 1, 2, 3]
+
+  ap_a:
+    tp_mean: 50.0
+    tp_std: 3.0
+    rtt_mean: 20.0
+    rtt_std: 5.0
+    mu_rtt: 2.0
+    n_channels: 2
+    rtt_noise_std: 2.0
+    tp_noise_std: 1.0
+
+  ap_b:
+    tp_mean: 20.0
+    tp_std: 2.0
+    rtt_mean: 80.0
+    rtt_std: 10.0
+    mu_rtt: 5.0
+    n_channels: 10
+    rtt_noise_std: 5.0
+    tp_noise_std: 1.0
+
+  app_requirements:
+    browser: {tp_need: 5.0,   rtt_need: 150.0, type: "browser"}
+    video:   {tp_need: 10.0,  rtt_need: 200.0, type: "video"}
+    call:    {tp_need: 0.5,   rtt_need: 100.0, type: "call"}
+    other:   {tp_need: 2.0,   rtt_need: 200.0, type: "other"}
+
+theory:
+  auto_estimate: true
+  L: null
+  mu: null
+  sigma_sq: null
+
+output:
+  results_dir: "results"
+  log_format: "jsonl"
+  save_plots: true
+  verbose: true

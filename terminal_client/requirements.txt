@@ -1,0 +1,7 @@
+# terminal_client の依存パッケージ
+# torch は CPU 専用 (--index-url 指定でサイズを最小化)
+torch==2.2.2
+httpx>=0.27.0
+pyyaml>=6.0
+# PyTorch 2.2.x の CPU ホイールは NumPy 1.x 向けビルドのため 2 未満に固定
+numpy>=1.26.0,<2

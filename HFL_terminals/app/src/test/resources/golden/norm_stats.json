@@ -1,0 +1,8 @@
+{
+  "tp_mean": 3.756855575868373,
+  "tp_std": 4.143707767375481,
+  "rtt_mean": 75.18281535648994,
+  "rtt_std": 83.24548747825203,
+  "rows": 8752,
+  "source": "HFL_terminals/app/src/main/assets/training_data.csv"
+}

@@ -1,0 +1,50 @@
+[
+	{
+		"appType": "ブラウザ",
+		"indicator": "tp",
+		"needRTT": 0,
+		"needTP": 5,
+		"incRTT": 5.0,
+		"incTP": 1.0,
+		"useApp": {
+		"minTime": 60,
+		"maxTime": 120
+		}
+	},
+	{
+		"appType": "動画",
+		"indicator": "tp",
+		"needRTT": 0,
+		"needTP": 10,
+		"incRTT": 5.0,
+		"incTP": 1.0,
+		"useApp": {
+		"minTime": 3600,
+		"maxTime": 6000
+		}
+	},
+	{
+		"appType": "通話",
+		"indicator": "rtt",
+		"needRTT": 200,
+		"needTP": 0,
+		"incRTT": 5.0,
+		"incTP": 1.0,
+		"useApp": {
+		"minTime": 30,
+		"maxTime": 60
+		}
+	},
+	{
+		"appType": "配信",
+		"indicator": "rtt",
+		"needRTT": 100,
+		"needTP": 0,
+		"incRTT": 5.0,
+		"incTP": 1.0,
+		"useApp": {
+		"minTime": 60,
+		"maxTime": 6000
+		}
+	}
+]
